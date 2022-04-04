@@ -1,0 +1,74 @@
+{
+  "name": "hubmovies",
+  "version": "1.0.1",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "build:prod": "npm run ng build -- --configuration production",
+    "test": "jest",
+    "lint": "ng lint",
+    "format:all": "prettier --write ."
+  },
+  "engines": {
+    "node": ">14"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "13.2.0",
+    "@angular/common": "13.2.0",
+    "@angular/compiler": "13.2.0",
+    "@angular/core": "13.2.0",
+    "@angular/forms": "13.2.0",
+    "@angular/platform-browser": "13.2.0",
+    "@angular/platform-browser-dynamic": "13.2.0",
+    "@angular/router": "13.2.0",
+    "@rx-angular/cdk": "^1.0.0-beta.1",
+    "@rx-angular/state": "^1.6.0",
+    "@rx-angular/template": "^1.0.0-beta.31",
+    "core-js": "^2.6.9",
+    "rxjs": "^7.5.5",
+    "tslib": "^2.3.1",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~13.0.2",
+    "@angular-eslint/builder": "~13.0.1",
+    "@angular-eslint/eslint-plugin": "~13.0.1",
+    "@angular-eslint/eslint-plugin-template": "~13.0.1",
+    "@angular-eslint/schematics": "~13.0.1",
+    "@angular-eslint/template-parser": "~13.0.1",
+    "@angular/cli": "13.2.0",
+    "@angular/compiler-cli": "13.2.0",
+    "@angular/language-service": "13.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "@types/jest": "^27.4.0",
+    "jest": "^27.5.1",
+    "jest-preset-angular": "^11.1.1",
+    "eslint": "^8.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "prettier": "^2.5.1",
+    "ts-node": "~10.3.1",
+    "typescript": "4.4.4"
+  },
+  "jest": {
+    "preset": "jest-preset-angular",
+    "setupFilesAfterEnv": [
+      "<rootDir>/projects/movies/setup-test.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/dist/"
+    ],
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "<rootDir>/projects/movies/tsconfig.spec.json",
+        "stringifyContentPathRegex": "\\.html$"
+      }
+    }
+  }
+}
