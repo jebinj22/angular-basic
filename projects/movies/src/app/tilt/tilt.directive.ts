@@ -18,9 +18,7 @@ export class TiltDirective {
 
   @HostListener('mouseenter', ['$event.pageX', '$event.target'])
   thisIsMyEventListenerCbName(pageX: number, target: HTMLElement) {
-    console.log(target);
     const pos = determineDirection(pageX, target);
-    console.log(this.rotationDegree);
 
     this.rotation =
       pos === 0
@@ -35,10 +33,6 @@ export class TiltDirective {
 
   @HostBinding('style.transform')
   rotation = 'rotate(0deg)';
-
-  // private origTransform: string;
-
-  constructor(private elementRef: ElementRef<HTMLElement>) {}
 }
 
 /**
