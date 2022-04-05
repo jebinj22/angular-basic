@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MovieModel } from '../movie-model';
 
 @Component({
@@ -6,10 +6,18 @@ import { MovieModel } from '../movie-model';
   templateUrl: './movie-card.component.html',
   styleUrls: ['./movie-card.component.scss'],
 })
-export class MovieCardComponent {
-  @Input() movie: MovieModel;
+export class MovieCardComponent implements OnInit {
+  @Input() movie!: MovieModel;
 
   @Output() selected = new EventEmitter<MovieModel>();
+
+  ngOnInit() {
+    if (!this.movie) {
+      throw new Error(
+        `MovieCardComponent expects movie to be set, ${this.movie} given`
+      );
+    }
+  }
 
   movieClicked() {
     this.selected.emit(this.movie);
