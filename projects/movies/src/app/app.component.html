@@ -1,8 +1,12 @@
 <app-shell>
 
-  <movie-card [movie]="movie"
-              (selected)="navToDetail($event)">
-  </movie-card>
+  <movie-list
+    *ngIf="movies?.length > 0; else: loader"
+    [movies]="movies"></movie-list>
+
+  <ng-template #loader>
+    <div class="loader"></div>
+  </ng-template>
 
 
 </app-shell>

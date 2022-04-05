@@ -7,17 +7,32 @@ import { MovieModel } from './movie/movie-model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  movie: MovieModel = {
-    id: '100',
-    title: 'Turning Red',
-    poster_path: '',
-    vote_average: 8,
-  };
+  movies: MovieModel[] = [
+    {
+      id: '100',
+      title: 'Turning Red',
+      poster_path: '',
+      vote_average: 8,
+    },
+    {
+      id: '100',
+      title: 'Turning Red',
+      poster_path: '',
+      vote_average: 8,
+    },
+    {
+      id: '100',
+      title: 'Turning Red 2',
+      poster_path: '',
+      vote_average: 6,
+    },
+    {
+      id: '100',
+      title: 'Turning Red 2',
+      poster_path: '',
+      vote_average: 6,
+    },
+  ];
 
   constructor() {}
-
-  navToDetail(movie: MovieModel): void {
-    console.log('selected', movie);
-    console.log(movie);
-  }
 }
