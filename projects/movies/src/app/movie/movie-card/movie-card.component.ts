@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MovieModel } from './movie-model';
+import { MovieModel } from '../movie-model';
 
 type BooleanInputType = string | boolean | null | undefined;
 

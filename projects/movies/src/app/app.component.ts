@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MovieModel } from './movie-card/movie-model';
+import { MovieModel } from './movie/movie-model';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ export class AppComponent {
   movie: MovieModel = {
     id: '100',
     title: 'Turning Red',
-    poster_path: '/qsdjk9oAKSQMWs0Vt5Pyfh6O4GZ.jpg',
+    poster_path: '',
     vote_average: 8,
   };
 
