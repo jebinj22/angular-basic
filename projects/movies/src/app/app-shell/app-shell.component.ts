@@ -6,12 +6,6 @@ import {
   Inject,
   ViewEncapsulation,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-} from 'rxjs';
 import { RxActionFactory } from '../shared/rxa-custom/actions';
 import { RxEffects } from '@rx-angular/state/effects';
 
@@ -58,7 +52,6 @@ export class AppShellComponent {
   }
 
   readonly viewState$ = this.state.select();
-
 
   closeSidenav = () => {
     this.ui.sideDrawerOpenToggle(false);
