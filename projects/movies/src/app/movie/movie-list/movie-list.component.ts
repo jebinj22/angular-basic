@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { MovieModel } from '../movie-model';
 
 @Component({
@@ -9,8 +10,9 @@ import { MovieModel } from '../movie-model';
 export class MovieListComponent {
   @Input() movies: MovieModel[];
 
+  constructor(private router: Router) {}
+
   navToDetail(movie: MovieModel): void {
-    console.log('selected', movie);
-    console.log(movie);
+    this.router.navigate(['/movie', movie.id]);
   }
 }

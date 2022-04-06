@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { MovieModel } from '../movie-model';
+import { MovieService } from '../movie.service';
 
 @Component({
   selector: 'movie-list-page',
@@ -16,22 +15,13 @@ export class MovieListPageComponent implements OnInit, OnDestroy {
   private sub: Subscription;
 
   constructor(
-    private httpClient: HttpClient,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private movieService: MovieService
   ) {}
 
   ngOnInit() {
-    const { tmdbBaseUrl: baseUrl, tmdbApiReadAccessKey: key } = environment;
-
     this.sub = this.activatedRoute.params.subscribe((params) => {
-      this.movies$ = this.httpClient.get<{ results: MovieModel[] }>(
-        `${baseUrl}/3/movie/${params.category}`,
-        {
-          headers: {
-            Authorization: `Bearer ${key}`,
-          },
-        }
-      );
+      this.movies$ = this.movieService.getMovieList(params.category);
     });
   }
 

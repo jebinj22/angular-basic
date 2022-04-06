@@ -11,7 +11,7 @@
       {{ movie.title | uppercase }}
     </div>
     <div class="movie-card-rating">
-      {{ movie.vote_average }}
+      <ui-star-rating [rating]="movie.vote_average"></ui-star-rating>
     </div>
   </div>
 </div>
