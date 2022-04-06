@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { LetModule } from '@rx-angular/template/let';
 import { ForModule } from '@rx-angular/template/experimental/for';
 import { HamburgerButtonModule } from '../ui/component/hamburger-button/hamburger-button.module';
@@ -24,7 +25,8 @@ import { LazyModule } from '../shared/cdk/lazy/lazy.module';
     ForModule,
     LazyModule,
     SvgIconModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule,
   ],
   exports: [AppShellComponent],
   providers: [IconRegistry],
