@@ -1,3 +1,5 @@
+<input name="search">
+
 <ng-container *ngIf="(movies$ | async) as movieResponse; else: loader">
 
   <movie-list
