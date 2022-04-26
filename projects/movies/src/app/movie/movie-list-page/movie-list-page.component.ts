@@ -16,6 +16,7 @@ import {
 import { MovieModel } from '../movie-model';
 import { MovieService } from '../movie.service';
 import { RxEffects } from '@rx-angular/state/effects';
+import { RxState } from '@rx-angular/state';
 
 @Component({
   selector: 'movie-list-page',
@@ -41,17 +42,20 @@ import { RxEffects } from '@rx-angular/state/effects';
       <div class="loader"></div>
     </ng-template>
   `,
-  providers: [RxEffects]
+  providers: [RxEffects, RxState]
 })
 export class MovieListPageComponent {
   searchString = new Subject<{category: string}>();
-  movies$: Observable<MovieModel[]> = this.movieService.list$;
+  movies$: Observable<MovieModel[]> = this.state.select('list');
 
   constructor(
+    private state: RxState<{ list: MovieModel[]  }>,
     private rxEffects: RxEffects,
     private activatedRoute: ActivatedRoute,
     private movieService: MovieService
   ) {
+
+    this.state.connect('list', this.movieService.list$)
 
     this.rxEffects.register(
       // trigger

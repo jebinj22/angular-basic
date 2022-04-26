@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  BehaviorSubject,
-  distinctUntilKeyChanged,
+  BehaviorSubject, concat,
+  distinctUntilKeyChanged, endWith,
   filter,
-  map,
-  Observable,
-  shareReplay,
+  map, merge,
+  Observable, of,
+  shareReplay, startWith,
   Subject,
   switchMap,
   tap, withLatestFrom
@@ -18,11 +18,14 @@ import { TMDBMovieModel } from '../shared/model/movie.model';
 import { MovieModel } from './movie-model';
 import { RxEffects } from '@rx-angular/state/effects';
 import { RxState, selectSlice } from '@rx-angular/state';
+import { toDictionary, update, upsert } from '@rx-angular/cdk/transformations';
 
 
 interface Global {
   list: MovieModel[],
-  test: string
+  loading: boolean,
+  details: { data?: Record<string, TMDBMovieDetailsModel>, loading?: boolean },
+
 }
 
 @Injectable({
@@ -37,38 +40,62 @@ export class MovieService extends RxState<Global> {
   state$ = this.select();
   list$ = this.select('list');
   listAndSize$ = this.select(
-    map(({list, test}) => ({
+    map(({ list, test }) => ({
       list,
       size: list.length
     }))
   );
-/*
-  _list$: Observable<MovieModel[]> = this.stateSubject.pipe(
-    filter(v => v !== undefined),
-    distinctUntilKeyChanged('list'),
-    map(s => s.list),
-    shareReplay(1)
-  );
-*/
+
+  /*
+    _list$: Observable<MovieModel[]> = this.stateSubject.pipe(
+      filter(v => v !== undefined),
+      distinctUntilKeyChanged('list'),
+      map(s => s.list),
+      shareReplay(1)
+    );
+  */
 
   constructor(private httpClient: HttpClient) {
     super();
 
     //this.set({list: []});
     //this.set(({ list }) => ({list: list.concat([])}));
-    console.log(this.get()) // initialState
 
-    const listUpdates$ = this.fetchTrigger$.pipe(
-      switchMap(v => this._fetchMovieList(v)),
-      map(({results}) => results)
+
+    const list$ = this.fetchTrigger$.pipe(
+      // tap(v => this.set({loading: true})),
+      switchMap(v => this._fetchMovieList(v).pipe(
+        map(({ results }) => (results))
+        //  startWith({loading: true}),
+        // endWith({loading: false}),
+        //  tap(v => this.set({loading: false})),
+      ))
     );
-    this.connect('list', listUpdates$);
+   // concat(of({loading: true}), list$, of({loading: false}))
+
+
+    const details$ =
+      of({ '2': {} as any as TMDBMovieDetailsModel }).pipe(
+      map((data) => ({ data, loading: true })),
+      startWith({ loading: true }),
+      endWith({ loading: false })
+    );
+
+    this.connect('details', details$);
+    this.connect('list', list$);
+    this.connect( merge(
+      list$.pipe(map(list => ({list}))),
+      details$.pipe(map(details => ({details}))))
+    );
+
+    //  this.connect('list', list$, ({list}, n) => upsert(list, n, 'id'));
+
     /*
-    this.rxEf.register(
-      listUpdates$,
-      (results) => this.stateSubject.next({ list: this.stateSubject.getValue().list.concat(results) })
-    );
-*/
+     this.rxEf.register(
+       list$,
+       (results) => this.set({ list: this.get('list').concat(results) })
+     );
+    */
   }
 
 
@@ -109,4 +136,5 @@ export class MovieService extends RxState<Global> {
   fetchMovieList(category: string): void {
     this.fetchTrigger$.next(category);
   }
+
 }
