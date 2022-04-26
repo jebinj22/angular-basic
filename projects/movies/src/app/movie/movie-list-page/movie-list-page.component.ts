@@ -1,6 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, interval, map, Observable, of, Subject, Subscription, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  interval,
+  map,
+  merge,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  switchMap,
+  takeUntil,
+  tap
+} from 'rxjs';
 import { MovieModel } from '../movie-model';
 import { MovieService } from '../movie.service';
 import { RxEffects } from '@rx-angular/state/effects';
@@ -8,7 +20,7 @@ import { RxEffects } from '@rx-angular/state/effects';
 @Component({
   selector: 'movie-list-page',
   template: `
-    <input name="search">
+    <input name="search" (input)="searchString.next({category: $event?.target?.value})">
 
     <ng-container *ngIf="(movies$ | async) as movieResponse; else: loader">
 
@@ -32,48 +44,27 @@ import { RxEffects } from '@rx-angular/state/effects';
   providers: [RxEffects]
 })
 export class MovieListPageComponent {
-  movies$: Observable<{ results: MovieModel[] }> = this.activatedRoute.params.pipe(
-    switchMap(params => this.movieService.getMovieList(params.category))
-  );
-
-  /*
-    state$ = new BehaviorSubject({ list: [1, 2, 43] });
-    selection$ = this.state$.pipe(
-      tap(console.log),
-      // filter(v => v !== undefined),
-      //  distinctUntilKeyChanged('list'),
-      map((s) => ({ list: s.list, count: s.list.length }))
-      //      shareReplay(1)
-    );
-  */
-
+  searchString = new Subject<{category: string}>();
+  movies$: Observable<MovieModel[]> = this.movieService.list$;
 
   constructor(
     private rxEffects: RxEffects,
     private activatedRoute: ActivatedRoute,
     private movieService: MovieService
   ) {
-    /*const trigger$ = activatedRoute.params;
-    const effect = (params) => {
-      // no side effect!!
-      this.movies$ = this.movieService.getMovieList(params.category);
-    };
-    this.rxEffects.register(trigger$.pipe(
-      switchMap(params => this.movieService.getMovieList(params.category))
-    ));
-    */
-    /*
-     selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
 
-  selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
-  selection$.subscribe((v) => console.log('new', v));
-    * */
+    this.rxEffects.register(
+      // trigger
+      merge(
+        this.activatedRoute.params,
+        this.searchString.asObservable()
+      ),
+      // side effect
+      params => this.movieService.fetchMovieList(params.category)
+    );
 
+    this.activatedRoute.params
+      .subscribe(params => this.movieService.fetchMovieList(params.category))
   }
 
 }
