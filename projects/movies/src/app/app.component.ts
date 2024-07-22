@@ -9,7 +9,7 @@ export class AppComponent {
 
   constructor(
   ) {
-    console.log('hello');
+    console.log('hello world');
   }
 
 }
